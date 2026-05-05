@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///C:/Users/User/Downloads/meeting-prep-dashboard.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freddy AI — Meeting Prep</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f1eb;
+  --card: #ffffff;
+  --dark: #111118;
+  --mid: #3a3a4a;
+  --muted: #8b8b9e;
+  --border: #e2dfd8;
+
+  --red: #e63946;
+  --red-light: #fdecea;
+  --green: #2d9b6f;
+  --green-light: #e8f7f1;
+  --amber: #e07b1f;
+  --amber-light: #fef3e7;
+  --blue: #2563eb;
+  --blue-light: #eff4ff;
+  --purple: #7c3aed;
+  --purple-light: #f3f0ff;
+  --teal: #0d9488;
+  --teal-light: #f0fdfa;
+  --pink: #db2777;
+  --pink-light: #fdf2f8;
+  --slate: #475569;
+  --slate-light: #f1f5f9;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--dark);
+  min-height: 100vh;
+  padding: 40px 32px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.header-left h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  color: var(--dark);
+}
+
+.header-left p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 300;
+}
+
+.badge-date {
+  background: var(--dark);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* Section labels */
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Grid layouts */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-accent {
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 14px 0 0 14px;
+}
+
+.card-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.card-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.card ul li {
+  font-size: 12.5px;
+  color: var(--mid);
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+  font-weight: 400;
+}
+
+.card ul li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+.card ul li strong {
+  font-weight: 500;
+  color: var(--dark);
+}
+
+/* Alert card */
+.alert-card {
+  background: #fff8f0;
+  border: 1px solid #f5d9b8;
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.alert-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alert-card p {
+  font-size: 13px;
+  color: #7a4a10;
+  line-height: 1.6;
+}
+
+.alert-card strong {
+  font-weight: 600;
+  color: #5a3008;
+}
+
+/* Two-col inside card */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.two-col .col {
+  padding: 4px 0;
+}
+
+.two-col .col:first-child {
+  padding-right: 18px;
+  border-right: 1px solid var(--border);
+}
+
+.two-col .col:last-child {
+  padding-left: 18px;
+}
+
+.col-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Post-live issue pills */
+.issue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.issue-pill {
+  border-radius: 12px;
+  padding: 16px 18px;
+  border: 1px solid transparent;
+}
+
+.issue-pill .pill-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.issue-pill ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.issue-pill ul li {
+  font-size: 12px;
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+}
+
+.issue-pill ul li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+/* Next steps */
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--dark);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.5;
+}
+
+.step-text strong {
+  display: block;
+  font-weight: 500;
+  color: var(--dark);
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.eta {
+  display: inline-block;
+  background: var(--dark);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+  letter-spacing: 0.3px;
+}
+
+/* Resolution type inline marker */
+.res-marker {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 5px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+/* Fade-in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card, .alert-card, .issue-pill, .step-item {
+  animation: fadeUp 0.4s ease both;
+}
+
+.header { animation: fadeUp 0.3s ease both; }
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <h1>Freddy AI — Meeting Prep</h1>
+    <p>bOnline · Transfer Rate · Resolution Rate · Post-Live Issues · Next Steps</p>
+  </div>
+  <div class="badge-date">April 2026</div>
+</div>
+
+<!-- ── TRANSFER RATE ── -->
+<div class="section-title">Transfer Rate / Handover Rate</div>
+
+<div style="margin-bottom:16px;">
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div style="display:grid; grid-template-columns:1fr 1fr;">
+
+      <!-- Invalid -->
+      <div style="padding:24px 26px; border-right:1px solid var(--border);">
+        <div class="card-label" style="color:var(--red);">❌ Invalid Transfers — Root Causes</div>
+        <ul>
+          <li><strong>Intent mismatch</strong> — Bot misread the query and served the wrong article or response (e.g. device name → setup steps, "phone call settings" → mobile app assumption)</li>
+          <li><strong>No clarifying questions</strong> — Transferred without asking anything, leaving customer stuck and agent without context</li>
+          <li><strong>Bot repeated itself</strong> — Looped the same response regardless of what the customer said</li>
+          <li><strong>Wrong workflow triggered</strong> — Cancellation/complaint workflow fired incorrectly (e.g. "we don't need itemised billing")</li>
+          <li><strong>Workflow not triggered / no handover message</strong> — Transfer happened with no context passed to the agent</li>
+          <li><strong>KB article wrong or missing</strong> — Wrong article surfaced or no article existed to cover the topic</li>
+          <li><strong>Persona / config</strong> — Bot made assumptions, didn't re-engage after unhelpful rating, or escalated too early</li>
+        </ul>
+      </div>
+
+      <!-- Valid -->
+      <div style="padding:24px 26px;">
+        <div class="card-label" style="color:var(--green);">✅ Valid Transfers — Why They Were Right</div>
+        <ul>
+          <li>Customer explicitly requested a human</li>
+          <li>Genuinely agent-only action (user removal, account changes, cancellations, DPA)</li>
+          <li>Customer tried the steps and still needed help</li>
+          <li>Sensitive topic or account issue requiring verification</li>
+          <li>Workflow correctly triggered (complaints, escalations)</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── RESOLUTION RATE ── -->
+<div class="section-title">Resolution Rate — Resolution Types</div>
+
+<div class="grid-2" style="margin-bottom:16px;">
+
+  <div class="card">
+    <div class="card-accent" style="background:var(--green);"></div>
+    <div style="padding-left:10px;">
+      <div class="card-label" style="color:var(--green);">✅ Resolved: Bot answered via KB article</div>
+      <ul>
+        <li>Genuine self-serve wins — bot served the right article and customer confirmed it helped</li>
+        <li>Examples: Yealink admin password, call redirect steps, DD setup, contract renewal info</li>
+        <li>Worth noting: some had no feedback clicked despite appearing resolved</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent" style="background:var(--amber);"></div>
+    <div style="padding-left:10px;">
+      <div class="card-label" style="color:var(--amber);">⚠️ Auto-resolved: Inactivity / Drop-off</div>
+      <ul>
+        <li>Customer stopped responding — could be resolved, could be abandoned</li>
+        <li>Hard to call true resolutions — no confirmation the answer actually helped</li>
+        <li>Issues hiding in here: bot responded in Malay/Indonesian, wrong email given, article marked unhelpful before drop-off</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent" style="background:var(--red);"></div>
+    <div style="padding-left:10px;">
+      <div class="card-label" style="color:var(--red);">🚫 Auto-resolved: Out of Hours</div>
+      <ul>
+        <li>Conversation closed because no agents were available — not a resolution</li>
+        <li>Several had unhelpful ratings — bot's answer wasn't good enough and customer had no fallback</li>
+        <li>Issues spotted: bot gave wrong email address (mycleaningfairy.co.uk), broadband and billing queries left unanswered</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-accent" style="background:var(--blue);"></div>
+    <div style="padding-left:10px;">
+      <div class="card-label" style="color:var(--blue);">🔁 Handover: Workflow / Automation Triggered</div>
+      <ul>
+        <li>Bot correctly identified a cancellation, complaint, or loyalty scenario and routed accordingly</li>
+        <li>Working as designed — not resolutions, but correct escalations</li>
+        <li>Cancellation workflows consistently triggering as expected</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="alert-card">
+  <div class="alert-icon">⚠️</div>
+  <p><strong>Key concern:</strong> Inactivity and out-of-hours auto-resolves are inflating the resolution rate. A customer dropping off or being told to call back is not the same as being helped — and several of those rows have unhelpful ratings to prove it.</p>
+</div>
+
+<!-- ── POST-LIVE ISSUES ── -->
+<div class="section-title">Post-Live Issues</div>
+
+<div class="issue-grid">
+
+  <div class="issue-pill" style="background:#fff0f1; border-color:#f5c6cb;">
+    <div class="pill-label" style="color:var(--red);">🤖 Hallucinations</div>
+    <ul style="color:#7a1a22;">
+      <li>Invented download URLs → 404 errors</li>
+      <li>Gave wrong bOnline contact email (mycleaningfairy.co.uk)</li>
+      <li>Told customer it would add a new user — then never did</li>
+      <li>Gave steps to remove a user (feature doesn't exist)</li>
+      <li>Surfaced email address not in any article</li>
+      <li>Echoed customer's own email back as bOnline's contact</li>
+    </ul>
+  </div>
+
+  <div class="issue-pill" style="background:#fff8ee; border-color:#f5d9b8;">
+    <div class="pill-label" style="color:var(--amber);">🔀 Intent / Context Misreads</div>
+    <ul style="color:#7a4010;">
+      <li>"Waiting on response" → bot apologised for engineer visit</li>
+      <li>"OK" → bot asked about uploaded files (none present)</li>
+      <li>"YES" → bot gave full services overview unprompted</li>
+      <li>"mope" (typo) → bot asked to clarify the word "mope"</li>
+      <li>Customer gave personal details → bot treated as number transfer</li>
+      <li>"See previous chat" → bot gave invoice download steps</li>
+      <li>"Can you reopen it" → bot triggered cancellation workflow</li>
+    </ul>
+  </div>
+
+  <div class="issue-pill" style="background:#f0f4ff; border-color:#c7d7fc;">
+    <div class="pill-label" style="color:var(--blue);">⚙️ Workflow Misfires</div>
+    <ul style="color:#1e3a8a;">
+      <li>Cancellation not triggering for: "close account", "i want to cancel", "i want to leave bonline", "cancel bOnline account"</li>
+      <li>Cancellation triggering incorrectly for: "change phone number", "we don't need itemised billing"</li>
+      <li>Rated unhelpful → customer could still chat instead of being transferred</li>
+      <li>Loyalty workflow not triggered for package downgrade request</li>
+      <li>Refund/complaint sent to cancellation workflow instead of agent</li>
+      <li>Out-of-hours cancellations not routing to workflow</li>
+    </ul>
+  </div>
+
+  <div class="issue-pill" style="background:#fdf4ff; border-color:#e9d5f7;">
+    <div class="pill-label" style="color:var(--purple);">🚪 Premature / Silent Transfers</div>
+    <ul style="color:#4c1d95;">
+      <li>Transferred on "hi" without responding</li>
+      <li>Transferred on "remove CRM integration" without attempting to help</li>
+      <li>Multiple cases: no context or summary passed to agent</li>
+      <li>Bot transferred to group instead of following correct workflow</li>
+      <li>Customer asked for invoice → straight to queue, no attempt to help</li>
+    </ul>
+  </div>
+
+  <div class="issue-pill" style="background:#f0fdf9; border-color:#a7f3d0;">
+    <div class="pill-label" style="color:var(--teal);">📄 Missing KB / Article Not Served</div>
+    <ul style="color:#134e4a;">
+      <li>"Turn off voicemail" → no article, no response</li>
+      <li>"Update my bank details" → correct article exists but not served</li>
+      <li>"Change direct debit" → article exists, not triggered</li>
+      <li>"Change name on billing" → no article triggered</li>
+      <li>Call issues on device → no troubleshooting article served</li>
+      <li>Bot referenced further docs but never provided the link</li>
+    </ul>
+  </div>
+
+  <div class="issue-pill" style="background:#fdf2f8; border-color:#fbcfe8;">
+    <div class="pill-label" style="color:var(--pink);">💬 Contextual Limitations</div>
+    <ul style="color:#831843;">
+      <li>Correct answer delivered as a wall of steps — agent said the same thing in one sentence</li>
+      <li>No clarifying questions before serving router article (assumed model)</li>
+      <li>Answered about extensions, ignored the actual request ("reconnect my number")</li>
+      <li>Looped name/email collection instead of progressing</li>
+      <li>Live vs AI Studio behaviour inconsistent for same query</li>
+    </ul>
+  </div>
+
+  <div class="issue-pill" style="background:#f8fafc; border-color:#cbd5e1;">
+    <div class="pill-label" style="color:var(--slate);">🔧 Platform / Technical Bugs</div>
+    <ul style="color:#334155;">
+      <li>Bot fallback error triggered multiple times after name/email provided</li>
+      <li>Bot responded in Malay/Indonesian after customer gave first name</li>
+      <li>Old "Chat with Support" widget still live post go-live</li>
+      <li>Handover summary not sent to agents (requires 10+ messages to trigger)</li>
+      <li>Analytics conversation ID filter not retained</li>
+      <li>Email capitalisation bug triggering wrong handover message</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ── NEXT STEPS ── -->
+<div class="section-title">Sweta (TAM) — Next Steps</div>
+
+<div class="steps-list">
+
+  <div class="step-item">
+    <div class="step-num">1</div>
+    <div class="step-text">
+      <strong>Resolve all open post go-live items <span class="eta">End of April</span></strong>
+      All flagged issues from the post-live log to be actioned and closed out.
+    </div>
+  </div>
+
+  <div class="step-item">
+    <div class="step-num">2</div>
+    <div class="step-text">
+      <strong>Enabling Improve AI Agent — sample report in progress <span class="eta">22 Apr</span></strong>
+      Report to be shared this Wednesday. Will support ongoing tuning and performance tracking.
+    </div>
+  </div>
+
+  <div class="step-item">
+    <div class="step-num">3</div>
+    <div class="step-text">
+      <strong>Launch Native Assistant for enhanced contextual routing <span class="eta">End of this week</span></strong>
+      Designed to reduce intent misreads and improve contextual understanding mid-conversation.
+    </div>
+  </div>
+
+  <div class="step-item">
+    <div class="step-num">4</div>
+    <div class="step-text">
+      <strong>Reduce unnecessary agent handoffs</strong>
+      Segregating valid vs invalid transfer data to identify patterns and reduce avoidable escalations.
+    </div>
+  </div>
+
+</div>
+
+
+
+</body></html>
